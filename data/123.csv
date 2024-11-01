@@ -1,3 +1,6 @@
 date,expense_type,amount,note
-2024-10-25,groceries,123,'this is for milk'
-2024-10-25,groceries,143,for juice last week 
+2024-10-28,utilities,450,books for data science
+2024-10-28,utilities,450,books for data science
+2024-10-28,utilities,450,books for data science
+2024-10-01,utilities,450,books for data 
+2024-10-31,utilities,450,books for data science
