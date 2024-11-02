@@ -50,7 +50,7 @@ This is a Python-based command-line application that helps users manage their ex
    git clone https://github.com/Himanshu-18-P/Expense-Tracker-Application.git
    cd Expense-Tracker-Application
 
-2. **install dependancy**
+2. **installation**
 
    ```bash
    pip install -r requirements.txt
