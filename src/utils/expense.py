@@ -83,36 +83,92 @@ class ExpenseManagement:
     
     def delete_data(self):
         try:
-            print('-'*10)
-            res = int(input('* to remove all data press 1\n* to remove of specific data by date press 2 : '))
+            print('-' * 10)
+            res = int(input('* To remove all data press 1\n* To remove specific data by date press 2: '))
             df = pd.read_csv(f'data/{self.user_id}.csv')
-            print(df)
-            if res and res == 1:
-                df = df.drop(df.index) 
+            if res == 1:
+                df = df.drop(df.index)
                 df.to_csv(f'data/{self.user_id}.csv', index=False)
-                return 'all data clear !!!!'
+                return 'All data cleared!'
+            elif res == 2:
+                date_str = input('Enter the date of the record you want to delete (YYYY-MM-DD): ')
+                try:
+                    date_to_delete = datetime.strptime(date_str, '%Y-%m-%d').date()
+                except ValueError:
+                    print('Invalid date format. Please use YYYY-MM-DD.')
+                    return
+                df['date'] = pd.to_datetime(df['date']).dt.date
+                indices = df[df['date'] == date_to_delete].index
+                if not indices.empty:
+                    df = df.drop(indices)
+                    df.to_csv(f'data/{self.user_id}.csv', index=False)
+                    return f'Data for {date_to_delete} has been deleted.'
+                else:
+                    return 'No data found for the specified date.'
             else:
-                your_year = input('* enter year(like 2014) : ')
-                your_month = input('* enter month(like 01) : ')
-                your_day = input('* end today date(like 09): ')
-                print(df[df['date'] == f'{your_year}-{your_month}-{your_day}'].index)
-                df = df.drop(df[df['date'] == f'{your_year}-{your_month}-{your_day}'].index)
-                df.to_csv(f'data/{self.user_id}.csv', index=False)
-                print(df)
-                return 'give date data is clear' 
-            
+                return 'Invalid option selected.'
+
         except Exception as e:
             logger.error(f"Error: {e}")
             logger.error(traceback.format_exc())
             return {"error": "An internal error occurred. Please try again later."}
-    
+
     def modify_data(self):
-        user_in = input('change date press 1 , change expense_type press 2 , change amount press 3')
-        df = pd.read_csv(f'data/{self.user_id}.csv')
-        if user_in and int(user_in) == 1:
-            pass 
-    
-    
+        try:
+            df = pd.read_csv(f'data/{self.user_id}.csv')
+            if df.empty:
+                print('No records to modify.')
+                return
+            df['date'] = pd.to_datetime(df['date']).dt.date
+
+            print(df)
+            index_to_modify = int(input('Enter the index of the record you want to modify: '))
+            if index_to_modify not in df.index:
+                print('Invalid index.')
+                return
+
+            print('What do you want to modify?')
+            print('1. Date')
+            print('2. Expense Type')
+            print('3. Amount')
+            print('4. Note')
+            choice = int(input('Enter your choice: '))
+
+            if choice == 1:
+                new_date_str = input('Enter new date (YYYY-MM-DD): ')
+                try:
+                    new_date = datetime.strptime(new_date_str, '%Y-%m-%d').date()
+                    df.at[index_to_modify, 'date'] = new_date
+                except ValueError:
+                    print('Invalid date format.')
+                    return
+            elif choice == 2:
+                print('Select new expense type:')
+                for key, value in expense_seen.items():
+                    print(f'{key}: {value}')
+                new_expense_input = int(input('Enter your choice: '))
+                new_expense_type = expense_seen.get(new_expense_input, None)
+                if new_expense_type:
+                    df.at[index_to_modify, 'expense_type'] = new_expense_type
+                else:
+                    print('Invalid expense type selected.')
+                    return
+            elif choice == 3:
+                new_amount = float(input('Enter new amount: '))
+                df.at[index_to_modify, 'amount'] = new_amount
+            elif choice == 4:
+                new_note = input('Enter new note: ')
+                df.at[index_to_modify, 'note'] = new_note
+            else:
+                print('Invalid choice.')
+                return
+
+            df.to_csv(f'data/{self.user_id}.csv', index=False)
+            print('Record updated successfully.')
+        except Exception as e:
+            logger.error(f"Error: {e}")
+            logger.error(traceback.format_exc())
+            print("An internal error occurred. Please try again later.")
     
 if __name__ == '__main__':
     print('done')

@@ -25,7 +25,7 @@ def is_user_new(res):
         elif change == 2:
             res = process.expense.delete_data()   
         else:   
-            pass        
+            res = process.expense.modify_data()        
         return  res 
     else:
         change = input('* press 1 to add record and enter to skip : ')
