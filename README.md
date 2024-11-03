@@ -12,7 +12,6 @@ This is a Python-based command-line application that helps users manage their ex
 - [Directory Structure](#directory-structure)
 - [Installation](#installation)
 - [Dependencies](#dependencies)
-- [Usage](#usage)
 
 
 ## Features
@@ -38,9 +37,6 @@ This is a Python-based command-line application that helps users manage their ex
 - **Weekly Report**: Generate expense reports for the past 7 days.
 - **Monthly Report**: Generate expense reports for the current month.
 - **Category Reports**: Generate reports filtered by specific categories.
-
-## Directory Structure
-
 
 ## Installation
 
